@@ -216,6 +216,11 @@ void AESEncrypt (uint8_t ciphertext[DATA_SIZE], uint8_t plaintext[DATA_SIZE], ui
 }
 
 int main(int argc, char** argv){
+  
+  uint8_t plaintext[DATA_SIZE];
+  uint8_t ciphertext[DATA_SIZE];
+  uint8_t key[DATA_SIZE];
+  
   uint8_t state[STATE_ROW_SIZE][STATE_COL_SIZE] = {
     {0x32, 0x88, 0x31, 0xE0},
     {0x43, 0x5A, 0x31, 0x37},
@@ -235,65 +240,6 @@ int main(int argc, char** argv){
 
   printf("\n----------\nMasterKey:\n");
   ShowState(masterkey);
-
-
-  /*
-  // Appel AddRoundKey
-  AddRoundKey(state, masterkey);
-
-  printf("\nÉtat après AddRoundKey:\n");
-  ShowState(state);
-
-  // Appel SubBytes
-  SubBytes(state);
-
-  printf("\nÉtat après SubBytes:\n");
-  ShowState(state);
-
-  // Appel ShiftRows
-  ShiftRows(state);
-
-  printf("\nÉtat après ShiftRows:\n");
-  ShowState(state);
-
-  // Appel MixColumns
-  MixColumns(state);
-
-  printf("\nÉtat après MixColumns:\n");
-  ShowState(state);
-
-  printf("\nTest MCMatrixColumns :\n");
-  uint8_t column[4] = {0xD4, 0xBF, 0x5D, 0x30};
-  MCMatrixColumnProduct(column);
-  for (int i=0; i<4; i++){
-    printf("%02X\n", column[i]);
-  }
-  
-  // TEST KeyGen
-  uint8_t roundkey[ROUND_COUNT][STATE_COL_SIZE][STATE_ROW_SIZE];
-  KeyGen(roundkey, masterkey);
-
-  for (int i=0; i<=10; i++){
-    printf("\nRoundKey %d:\n", i);
-    ShowState(roundkey[i]);
-  }
-
-  printf("\nTest Message to State:\n");
-  uint8_t newTxt[STATE_COL_SIZE][STATE_ROW_SIZE];
-  uint8_t mess[DATA_SIZE] = {
-    0x00, 0x01, 0x02, 0x03,
-    0x04, 0x05, 0x06, 0x07,
-    0x08, 0x09, 0x0A, 0x0B,
-    0x0C, 0x0D, 0x0E, 0x0F };
- 
-  MessageToState(newTxt, mess);
-
-  ShowState(newTxt);
-  */
-
-  uint8_t plaintext[DATA_SIZE];
-  uint8_t ciphertext[DATA_SIZE];
-  uint8_t key[DATA_SIZE];
 
   StateToMessage(plaintext, state);
   StateToMessage(key, masterkey);
