@@ -2,7 +2,7 @@
 Codage d'une primitive AES sur clé 128 bits dans le cadre d'un cours de cryptologie. 
 
 
-## Commande de lancement :
+## Commandes de lancement :
 ```
 $git clone git@github.com:FlorianMachenaud/AES-128bits.git
 $cd AES-128bits/
