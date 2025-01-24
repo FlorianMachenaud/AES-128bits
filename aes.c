@@ -197,10 +197,10 @@ void AESEncrypt (uint8_t ciphertext[DATA_SIZE], uint8_t plaintext[DATA_SIZE], ui
 
   KeyGen(roundkeys, key_state);
 
-  for (int n=0; n<=ROUND_COUNT; n++){
+  for (int n=0; n<ROUND_COUNT; n++){
     if (n==0){
       AddRoundKey(cipher_state, roundkeys[n]);
-    }else if (n==ROUND_COUNT){
+    }else if (n==(ROUND_COUNT - 1)){
       SubBytes(cipher_state);
       ShiftRows(cipher_state);
       AddRoundKey(cipher_state, roundkeys[n]);
