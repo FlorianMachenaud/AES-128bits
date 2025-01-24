@@ -187,30 +187,29 @@ void StateToMessage (uint8_t message [DATA_SIZE], uint8_t state [STATE_ROW_SIZE]
 }
 
 void AESEncrypt (uint8_t ciphertext[DATA_SIZE], uint8_t plaintext[DATA_SIZE], uint8_t key[DATA_SIZE]){
-  uint8_t cipher_state[STATE_COL_SIZE][STATE_ROW_SIZE];
-  uint8_t key_state[STATE_COL_SIZE][STATE_ROW_SIZE];
-  uint8_t roundkeys[ROUND_COUNT][STATE_COL_SIZE][STATE_ROW_SIZE];
-
+  uint8_t cipher_state[STATE_ROW_SIZE][STATE_COL_SIZE];
+  uint8_t key_state[STATE_ROW_SIZE][STATE_COL_SIZE];
+  uint8_t roundkeys[ROUND_COUNT+1][STATE_ROW_SIZE][STATE_COL_SIZE];
   
   MessageToState(cipher_state, plaintext);
   MessageToState(key_state, key);
-
   KeyGen(roundkeys, key_state);
 
-  for (int n=0; n<ROUND_COUNT; n++){
-    if (n==0){
-      AddRoundKey(cipher_state, roundkeys[n]);
-    }else if (n==(ROUND_COUNT - 1)){
-      SubBytes(cipher_state);
-      ShiftRows(cipher_state);
-      AddRoundKey(cipher_state, roundkeys[n]);
-    }else{
-      SubBytes(cipher_state);
-      ShiftRows(cipher_state);
-      MixColumns(cipher_state);
-      AddRoundKey(cipher_state, roundkeys[n]);
-    }
+  // Étape initiale AddRoundKey
+  AddRoundKey(cipher_state, roundkeys[0]);
+
+  // Rounds intermédiaires
+  for (int n = 1; n < ROUND_COUNT; n++) {
+    SubBytes(cipher_state);
+    ShiftRows(cipher_state);
+    MixColumns(cipher_state);
+    AddRoundKey(cipher_state, roundkeys[n]);
   }
+
+  // Dernier tour
+  SubBytes(cipher_state);
+  ShiftRows(cipher_state);
+  AddRoundKey(cipher_state, roundkeys[ROUND_COUNT]);
 
   StateToMessage(ciphertext, cipher_state);
 }
